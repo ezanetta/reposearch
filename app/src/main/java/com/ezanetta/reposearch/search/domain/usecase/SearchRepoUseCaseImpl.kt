@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SearchRepositoriesUseCaseImpl @Inject constructor(
+class SearchRepoUseCaseImpl @Inject constructor(
     private val itemsApiService: RepoApiService
-) : SearchRepositoriesUseCase {
+) : SearchRepoUseCase {
 
     override suspend fun search(query: String): Flow<Result<List<RepoItem>>> {
         return flow {
