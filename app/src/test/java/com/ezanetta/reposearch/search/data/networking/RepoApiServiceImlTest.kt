@@ -28,7 +28,7 @@ class RepoApiServiceImlTest {
 
             // WHEN
             val response: Flow<Result<List<RepoItem>>> =
-                repoApiServiceImpl.getReposByQuery(USERNAME, 0)
+                repoApiServiceImpl.getReposByQuery(USERNAME, FIRST_PAGE)
 
             // THEN
             response.collect { result ->
@@ -47,7 +47,7 @@ class RepoApiServiceImlTest {
 
             // WHEN
             val response: Flow<Result<List<RepoItem>>> =
-                repoApiServiceImpl.getReposByQuery(USERNAME, 0)
+                repoApiServiceImpl.getReposByQuery(USERNAME, FIRST_PAGE)
 
             // THEN
             response.collect {
@@ -58,6 +58,7 @@ class RepoApiServiceImlTest {
 
     private companion object {
         const val USERNAME = "Google"
+        const val FIRST_PAGE = 0
         val repoList = listOf(RepoItem("Fake repo", Owner("testUrl")))
     }
 }
