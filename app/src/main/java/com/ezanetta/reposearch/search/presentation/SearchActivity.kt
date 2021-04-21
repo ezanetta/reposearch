@@ -7,6 +7,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.activity.viewModels
 import com.ezanetta.reposearch.R
+import com.ezanetta.reposearch.search.presentation.model.SearchActivityState
 import com.ezanetta.reposearch.search.presentation.viewModel.RepoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,9 +24,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        searchViewModel.repos.observe(this, {
-            it.forEach { repo ->
-                Log.d("Dale wacho", "Repo name ${repo.name}")
+        searchViewModel.searchActivityState.observe(this, { state ->
+            when (state) {
+                is SearchActivityState.ShowRepos -> {
+                    state.repos.forEach { repo ->
+                        Log.d("Dale wacho", "Repo name ${repo.name}")
+                    }
+                }
+                SearchActivityState.ShowErrorState -> {
+                    Log.d("ERROR", "No me la container")
+                }
             }
         })
     }
