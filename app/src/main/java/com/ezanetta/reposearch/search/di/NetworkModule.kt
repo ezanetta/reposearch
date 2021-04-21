@@ -1,5 +1,6 @@
 package com.ezanetta.reposearch.search.di
 
+import com.ezanetta.reposearch.BuildConfig
 import com.ezanetta.reposearch.search.data.networking.RepoApiClient
 import com.ezanetta.reposearch.search.data.networking.RepoApiService
 import com.ezanetta.reposearch.search.data.networking.RepoApiServiceImpl
@@ -18,7 +19,7 @@ object NetworkModule {
     @Provides
     fun provideRepoApiClient() : RepoApiClient {
         return Retrofit.Builder()
-            .baseUrl("https://api.github.com")
+            .baseUrl(BuildConfig.GITHUB_BASE_URL)
             .client(OkHttpClient())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
