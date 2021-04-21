@@ -1,10 +1,8 @@
 package com.ezanetta.reposearch.search.di
 
-import com.ezanetta.reposearch.search.data.networking.RepositoryApiClient
-import com.ezanetta.reposearch.search.data.networking.RepositoryApiService
-import com.ezanetta.reposearch.search.data.networking.RepositoryApiServiceImpl
-import com.ezanetta.reposearch.search.domain.usecase.SearchRepositoriesUseCase
-import com.ezanetta.reposearch.search.domain.usecase.SearchRepositoriesUseCaseImpl
+import com.ezanetta.reposearch.search.data.networking.RepoApiClient
+import com.ezanetta.reposearch.search.data.networking.RepoApiService
+import com.ezanetta.reposearch.search.data.networking.RepoApiServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,17 +16,17 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object NetworkModule {
 
     @Provides
-    fun provideRepoApiClient() : RepositoryApiClient {
+    fun provideRepoApiClient() : RepoApiClient {
         return Retrofit.Builder()
             .baseUrl("https://api.github.com")
             .client(OkHttpClient())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
-            .create(RepositoryApiClient::class.java)
+            .create(RepoApiClient::class.java)
     }
 
     @Provides
-    fun providesApiService(repositoryApiClient: RepositoryApiClient) : RepositoryApiService {
-        return RepositoryApiServiceImpl(repositoryApiClient)
+    fun providesApiService(repoApiClient: RepoApiClient) : RepoApiService {
+        return RepoApiServiceImpl(repoApiClient)
     }
 }

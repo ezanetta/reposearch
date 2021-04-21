@@ -1,8 +1,7 @@
 package com.ezanetta.reposearch.search.presentation.viewModel
 
 import androidx.lifecycle.*
-import androidx.lifecycle.Transformations.map
-import com.ezanetta.reposearch.search.data.model.RepositoryItem
+import com.ezanetta.reposearch.search.data.model.RepoItem
 import com.ezanetta.reposearch.search.data.model.Result
 import com.ezanetta.reposearch.search.domain.usecase.SearchRepositoriesUseCase
 import com.ezanetta.reposearch.search.presentation.model.SearchActivityState
@@ -25,7 +24,7 @@ class RepoViewModel @Inject constructor(
                 when (response) {
                     is Result.Success -> _searchActivityState.postValue(
                         SearchActivityState.ShowRepos(
-                            response.data as ArrayList<RepositoryItem>
+                            response.data as ArrayList<RepoItem>
                         )
                     )
                     is Result.Failure ->
