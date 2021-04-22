@@ -13,7 +13,7 @@ import org.junit.Test
 import org.junit.Assert.assertTrue
 
 @ExperimentalCoroutinesApi
-class RepoApiServiceImlTest {
+class RepoApiServiceImplTest {
 
     private val apiClient: RepoApiClient = mockk()
     private val repoApiServiceImpl = RepoApiServiceImpl(apiClient)
