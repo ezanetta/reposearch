@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Reposearch</string>
+    <string name="avatar_image_cd">Avatar image</string>
+    <string name="search_repo_hint">Search repositories by username</string>
+    <string name="error_message">Error, something went wrong, try again</string>
+    <string name="search_try_again">Search</string>
 </resources>
