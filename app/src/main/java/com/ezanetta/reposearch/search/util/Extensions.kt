@@ -28,5 +28,5 @@ fun AppCompatActivity.closeKeyboard() {
 
 fun AppCompatActivity.showKeyboard() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-    inputMethodManager?.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+    inputMethodManager?.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
 }

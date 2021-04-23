@@ -74,13 +74,17 @@ class SearchActivity : AppCompatActivity() {
             )
 
         snackbar.setAction(getString(R.string.search_try_again)) {
-            binding.searchView.apply {
-                setQuery("", false)
-                requestFocus()
-                showKeyboard()
-            }
+            actionListener(it)
         }
 
         snackbar.show()
+    }
+
+    private fun actionListener(view: View) {
+        binding.searchView.apply {
+            setQuery("", false)
+            requestFocus()
+            showKeyboard()
+        }
     }
 }
