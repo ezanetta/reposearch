@@ -19,6 +19,8 @@ class RepoViewModel @Inject constructor(
     private val _searchActivityState: MutableLiveData<SearchActivityState> = MutableLiveData()
 
     fun fetchRepos(query: String) {
+        _searchActivityState.postValue(SearchActivityState.ShowLoading)
+
         viewModelScope.launch {
             repoUseCase.search(query).collect { response ->
                 when (response) {
