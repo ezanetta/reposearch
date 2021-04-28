@@ -47,22 +47,24 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupObserver() {
-        searchViewModel.searchActivityState.observe(this, { state ->
-            when (state) {
-                is SearchActivityState.ShowRepos -> {
-                    binding.loading.hide()
-                    binding.repoList.adapter = RepoAdapter(state.repos)
-                }
-                SearchActivityState.ShowErrorState -> {
-                    binding.loading.hide()
-                    showErrorMessage()
-                    closeKeyboard()
-                }
-                SearchActivityState.ShowLoading -> {
-                    binding.loading.show()
-                }
+        searchViewModel.searchActivityState.observe(this, ::processActivityState)
+    }
+    
+    private fun processActivityState(state: SearchActivityState) {
+        when (state) {
+            is SearchActivityState.ShowRepos -> {
+                binding.loading.hide()
+                binding.repoList.adapter = RepoAdapter(state.repos)
             }
-        })
+            SearchActivityState.ShowErrorState -> {
+                binding.loading.hide()
+                showErrorMessage()
+                closeKeyboard()
+            }
+            SearchActivityState.ShowLoading -> {
+                binding.loading.show()
+            }
+        }
     }
 
     private fun showErrorMessage() {
