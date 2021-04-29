@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import com.ezanetta.reposearch.R
 import com.ezanetta.reposearch.databinding.ActivitySearchBinding
 import com.ezanetta.reposearch.search.presentation.adapter.RepoAdapter
@@ -49,8 +51,9 @@ class SearchActivity : AppCompatActivity() {
     private fun setupObserver() {
         searchViewModel.searchActivityState.observe(this, ::processActivityState)
     }
-    
-    private fun processActivityState(state: SearchActivityState) {
+
+    @VisibleForTesting(otherwise = PRIVATE)
+    fun processActivityState(state: SearchActivityState) {
         when (state) {
             is SearchActivityState.ShowRepos -> {
                 binding.loading.hide()

@@ -1,9 +1,9 @@
 package com.ezanetta.reposearch.search.di
 
-import com.ezanetta.reposearch.BuildConfig
 import com.ezanetta.reposearch.search.data.networking.RepoApiClient
 import com.ezanetta.reposearch.search.data.networking.RepoApiService
 import com.ezanetta.reposearch.search.data.networking.RepoApiServiceImpl
+import com.ezanetta.reposearch.search.util.GITHUB_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +19,7 @@ object NetworkModule {
     @Provides
     fun provideRepoApiClient() : RepoApiClient {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.GITHUB_BASE_URL)
+            .baseUrl(GITHUB_BASE_URL)
             .client(OkHttpClient())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
