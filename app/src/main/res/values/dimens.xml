@@ -2,6 +2,7 @@
 <resources>
     <dimen name="match_constraints">0dp</dimen>
     <dimen name="medium">16dp</dimen>
+    <dimen name="small">8dp</dimen>
     <dimen name="owner_avatar_image_size">60dp</dimen>
     <dimen name="search_view_height">60dp</dimen>
 </resources>

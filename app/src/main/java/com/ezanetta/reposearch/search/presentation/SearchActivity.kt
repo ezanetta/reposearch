@@ -1,17 +1,16 @@
 package com.ezanetta.reposearch.search.presentation
 
 import android.os.Bundle
-import android.view.View
 import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.ezanetta.reposearch.R
+import androidx.paging.LoadState
 import com.ezanetta.reposearch.databinding.ActivitySearchBinding
 import com.ezanetta.reposearch.search.presentation.adapter.RepoAdapter
+import com.ezanetta.reposearch.search.presentation.adapter.RepoLoadStateAdapter
 import com.ezanetta.reposearch.search.presentation.viewModel.RepoViewModel
-import com.ezanetta.reposearch.search.util.showKeyboard
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -53,29 +52,18 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        binding.repoList.adapter = repoAdapter
-    }
+        binding.retryButton.setOnClickListener { repoAdapter.retry() }
 
-    private fun showErrorMessage() {
-        val snackbar = Snackbar
-            .make(
-                binding.container,
-                getString(R.string.error_message),
-                Snackbar.LENGTH_LONG
-            )
+        binding.repoList.adapter =
+            repoAdapter.withLoadStateFooter(RepoLoadStateAdapter { repoAdapter.retry() })
 
-        snackbar.setAction(getString(R.string.search_try_again)) {
-            actionListener(it)
-        }
-
-        snackbar.show()
-    }
-
-    private fun actionListener(view: View) {
-        binding.searchView.apply {
-            setQuery("", false)
-            requestFocus()
-            showKeyboard()
+        repoAdapter.addLoadStateListener { loadState ->
+            binding.apply {
+                loading.isVisible = loadState.source.refresh is LoadState.Loading
+                repoList.isVisible = loadState.source.refresh is LoadState.NotLoading
+                retryButton.isVisible = loadState.source.refresh is LoadState.Error
+                errorMsg.isVisible = loadState.source.refresh is LoadState.Error
+            }
         }
     }
 }

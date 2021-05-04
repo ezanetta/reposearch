@@ -21,6 +21,8 @@ class RepoAdapter : PagingDataAdapter<RepoItem, RepoItemViewHolder>(COMPARATOR) 
         getItem(position)?.let { holder.bindRepo(it) }
     }
 
+    fun isEmpty() = itemCount == 0
+
     companion object {
         private val COMPARATOR = object : DiffUtil.ItemCallback<RepoItem>() {
             override fun areItemsTheSame(oldItem: RepoItem, newItem: RepoItem): Boolean =
