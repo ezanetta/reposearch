@@ -2,13 +2,13 @@ package com.ezanetta.reposearch.search.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.ezanetta.reposearch.databinding.RepoItemLayoutBinding
 import com.ezanetta.reposearch.search.data.model.RepoItem
 import com.ezanetta.reposearch.search.presentation.adapter.viewholder.RepoItemViewHolder
 
-class RepoAdapter(private val repoList: List<RepoItem>) :
-    RecyclerView.Adapter<RepoItemViewHolder>() {
+class RepoAdapter : PagingDataAdapter<RepoItem, RepoItemViewHolder>(COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepoItemViewHolder {
         val binding = RepoItemLayoutBinding
@@ -18,8 +18,16 @@ class RepoAdapter(private val repoList: List<RepoItem>) :
     }
 
     override fun onBindViewHolder(holder: RepoItemViewHolder, position: Int) {
-        holder.bindRepo(repoList[position])
+        getItem(position)?.let { holder.bindRepo(it) }
     }
 
-    override fun getItemCount() = repoList.size
+    companion object {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<RepoItem>() {
+            override fun areItemsTheSame(oldItem: RepoItem, newItem: RepoItem): Boolean =
+                oldItem.name == newItem.name
+
+            override fun areContentsTheSame(oldItem: RepoItem, newItem: RepoItem): Boolean =
+                oldItem == newItem
+        }
+    }
 }

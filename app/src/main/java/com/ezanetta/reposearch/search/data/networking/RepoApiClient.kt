@@ -4,6 +4,7 @@ import com.ezanetta.reposearch.search.data.model.RepoItem
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface RepoApiClient {
 
@@ -15,5 +16,9 @@ interface RepoApiClient {
      */
     @Headers("User-Agent: GitHubMVP-App")
     @GET("users/{username}/repos")
-    suspend fun searchReposByUsername(@Path("username") username: String): List<RepoItem>
+    suspend fun searchReposByUsername(
+        @Path("username") username: String,
+        @Query("page") page: Int,
+        @Query("per_page") size: Int
+    ): List<RepoItem>
 }

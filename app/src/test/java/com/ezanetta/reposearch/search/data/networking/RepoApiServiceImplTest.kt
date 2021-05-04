@@ -9,8 +9,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
-import org.junit.Test
 import org.junit.Assert.assertTrue
+import org.junit.Test
 
 @ExperimentalCoroutinesApi
 class RepoApiServiceImplTest {
@@ -23,7 +23,7 @@ class RepoApiServiceImplTest {
         runBlocking {
             // GIVEN
             coEvery {
-                apiClient.searchReposByUsername(any())
+                apiClient.searchReposByUsername(any(), any(), any())
             } returns repoList
 
             // WHEN
@@ -42,7 +42,7 @@ class RepoApiServiceImplTest {
         runBlocking {
             // GIVEN
             coEvery {
-                apiClient.searchReposByUsername(any())
+                apiClient.searchReposByUsername(any(), any(), any())
             } throws Exception()
 
             // WHEN

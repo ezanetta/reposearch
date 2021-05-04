@@ -72,6 +72,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation("io.coil-kt:coil:1.2.0")
     implementation "androidx.activity:activity-ktx:1.2.2"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.10.0'

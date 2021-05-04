@@ -1,34 +1,32 @@
 package com.ezanetta.reposearch.search.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import androidx.activity.viewModels
-import androidx.annotation.VisibleForTesting
-import androidx.annotation.VisibleForTesting.PRIVATE
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.ezanetta.reposearch.R
 import com.ezanetta.reposearch.databinding.ActivitySearchBinding
 import com.ezanetta.reposearch.search.presentation.adapter.RepoAdapter
-import com.ezanetta.reposearch.search.presentation.model.SearchActivityState
 import com.ezanetta.reposearch.search.presentation.viewModel.RepoViewModel
-import com.ezanetta.reposearch.search.util.closeKeyboard
-import com.ezanetta.reposearch.search.util.hide
-import com.ezanetta.reposearch.search.util.show
 import com.ezanetta.reposearch.search.util.showKeyboard
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
 
     private val searchViewModel: RepoViewModel by viewModels()
     private lateinit var binding: ActivitySearchBinding
+    private val repoAdapter = RepoAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
-        setupObserver()
+        setupViews()
         listenSearch()
         setContentView(binding.root)
     }
@@ -37,7 +35,13 @@ class SearchActivity : AppCompatActivity() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { searchViewModel.fetchRepos(it) }
+                lifecycleScope.launch {
+                    query?.let {
+                        searchViewModel.fetchRepos(it).collect { pagingData ->
+                            repoAdapter.submitData(pagingData)
+                        }
+                    }
+                }
                 return true
             }
 
@@ -48,26 +52,8 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
-    private fun setupObserver() {
-        searchViewModel.searchActivityState.observe(this, ::processActivityState)
-    }
-
-    @VisibleForTesting(otherwise = PRIVATE)
-    fun processActivityState(state: SearchActivityState) {
-        when (state) {
-            is SearchActivityState.ShowRepos -> {
-                binding.loading.hide()
-                binding.repoList.adapter = RepoAdapter(state.repos)
-            }
-            SearchActivityState.ShowErrorState -> {
-                binding.loading.hide()
-                showErrorMessage()
-                closeKeyboard()
-            }
-            SearchActivityState.ShowLoading -> {
-                binding.loading.show()
-            }
-        }
+    private fun setupViews() {
+        binding.repoList.adapter = repoAdapter
     }
 
     private fun showErrorMessage() {

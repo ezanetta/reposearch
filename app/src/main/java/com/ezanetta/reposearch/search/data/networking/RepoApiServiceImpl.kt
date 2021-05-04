@@ -13,10 +13,11 @@ class RepoApiServiceImpl @Inject constructor(
 
     override fun getReposByQuery(
         query: String,
-        currentPage: Int
+        page: Int,
+        size: Int
     ): Flow<Result<List<RepoItem>>> {
         return flow {
-            apiClient.searchReposByUsername(query).takeIf {
+            apiClient.searchReposByUsername(query, page, size).takeIf {
                 it.isNotEmpty()
             }?.run {
                 emit(
