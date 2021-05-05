@@ -3,6 +3,7 @@ package com.ezanetta.reposearch.search.presentation
 import android.os.Bundle
 import android.widget.SearchView
 import androidx.activity.viewModels
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -57,13 +58,18 @@ class SearchActivity : AppCompatActivity() {
         binding.repoList.adapter =
             repoAdapter.withLoadStateFooter(RepoLoadStateAdapter { repoAdapter.retry() })
 
-        repoAdapter.addLoadStateListener { loadState ->
-            binding.apply {
-                loading.isVisible = loadState.source.refresh is LoadState.Loading
-                repoList.isVisible = loadState.source.refresh is LoadState.NotLoading
-                retryButton.isVisible = loadState.source.refresh is LoadState.Error
-                errorMsg.isVisible = loadState.source.refresh is LoadState.Error
-            }
+        repoAdapter.addLoadStateListener {
+            processLoadState(it.source.refresh)
+        }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun processLoadState(loadState: LoadState) {
+        binding.apply {
+            loading.isVisible = loadState is LoadState.Loading
+            repoList.isVisible = loadState is LoadState.NotLoading
+            retryButton.isVisible = loadState is LoadState.Error
+            errorMsg.isVisible = loadState is LoadState.Error
         }
     }
 }

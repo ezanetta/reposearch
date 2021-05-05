@@ -2,14 +2,13 @@ package com.ezanetta.reposearch.search.presentation.view
 
 import android.os.Build
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
-import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.paging.LoadState
 import com.ezanetta.reposearch.R
-import com.ezanetta.reposearch.search.data.model.Owner
-import com.ezanetta.reposearch.search.data.model.RepoItem
 import com.ezanetta.reposearch.search.presentation.SearchActivity
-import com.ezanetta.reposearch.search.presentation.model.SearchActivityState
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -19,7 +18,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -56,30 +54,50 @@ class SearchActivityTest {
     }
 
     @Test
-    fun `processActivityState SHOULD show a loading spinner while networking call is processed`() {
+    fun `processLoadState SHOULD show a loading spinner WHEN LoadState is Loading`() {
         // GIVEN
         val loading = shadowActivity.findViewById<ProgressBar>(R.id.loading)
 
         // WHEN
-        shadowActivity.processActivityState(SearchActivityState.ShowLoading)
+        shadowActivity.processLoadState(LoadState.Loading)
 
         // THEN
         assertTrue(loading.visibility == View.VISIBLE)
     }
 
     @Test
-    fun `processActivityState SHOULD hide loading spinner when SearchActivityState is ShowRepos`() {
+    fun `processLoadState SHOULD hide loading spinner when LoadState is NotLoading`() {
         // GIVEN
         val loading = shadowActivity.findViewById<ProgressBar>(R.id.loading)
 
         // WHEN
-        shadowActivity.processActivityState(SearchActivityState.ShowRepos(repoList))
+        shadowActivity.processLoadState(LoadState.NotLoading(false))
 
         // THEN
         assertTrue(loading.visibility == View.GONE)
     }
 
-    private companion object {
-        val repoList = arrayListOf(RepoItem("Fake repo", Owner("testUrl")))
+    @Test
+    fun `processLoadState SHOULD show retry button when LoadState is Error`() {
+        // GIVEN
+        val retryButton = shadowActivity.findViewById<Button>(R.id.retry_button)
+
+        // WHEN
+        shadowActivity.processLoadState(LoadState.Error(Throwable()))
+
+        // THEN
+        assertTrue(retryButton.visibility == View.VISIBLE)
+    }
+
+    @Test
+    fun `processLoadState SHOULD show error message text when LoadState is Error`() {
+        // GIVEN
+        val errorMsg = shadowActivity.findViewById<TextView>(R.id.error_msg)
+
+        // WHEN
+        shadowActivity.processLoadState(LoadState.Error(Throwable()))
+
+        // THEN
+        assertTrue(errorMsg.visibility == View.VISIBLE)
     }
 }
