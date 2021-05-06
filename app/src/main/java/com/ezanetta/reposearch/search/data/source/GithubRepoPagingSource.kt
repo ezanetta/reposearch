@@ -12,8 +12,8 @@ class GithubRepoPagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, RepoItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(ONE_POSITION)
+                ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(ONE_POSITION)
         }
     }
 
@@ -34,5 +34,6 @@ class GithubRepoPagingSource(
     private companion object {
         const val INITIAL_PAGE = 1
         const val ONE_PAGE = 1
+        const val ONE_POSITION = 1
     }
 }
